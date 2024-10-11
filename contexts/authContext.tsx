@@ -2,12 +2,19 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth } from "../firebase.config";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext<{
+  currentUser: User | null;
+  setCurrentUser: (value: React.SetStateAction<User | null>) => void;
+  loading: boolean;
+  setLoading: (value: React.SetStateAction<boolean>) => void;
+} | null>(null);
 
-export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+import { ReactNode } from "react";
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,7 +33,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser, loading }}>
+    <AuthContext.Provider
+      value={{ currentUser, setCurrentUser, loading, setLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -4,15 +4,17 @@ import { useAuth } from "@/contexts/authContext";
 import "./home.style.css";
 
 const HomePage = () => {
-  const { currentUser, loading } = useAuth();
+  const authValue = useAuth();
 
-  if (loading) {
+  if (authValue === null || authValue.loading) {
     return (
       <div className="bg-base-300 rounded-box p-5 ">
         <h1 className="text-5xl font-bold text-center">LOADING...</h1>
       </div>
     );
   }
+
+  const { currentUser } = authValue;
 
   return (
     <div className="bg-base-300 rounded-box p-5 ">
@@ -27,9 +29,8 @@ const HomePage = () => {
           <div className="w-96 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
             <img
               src={
-                currentUser
-                  ? currentUser.photoURL
-                  : `https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png`
+                currentUser?.photoURL ??
+                `https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png`
               }
             />
           </div>
