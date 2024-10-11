@@ -4,7 +4,15 @@ import { useAuth } from "@/contexts/authContext";
 import "./home.style.css";
 
 const HomePage = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="bg-base-300 rounded-box p-5 ">
+        <h1 className="text-5xl font-bold text-center">LOADING...</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-base-300 rounded-box p-5 ">
