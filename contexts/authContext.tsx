@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         sessionStorage.setItem("user", JSON.stringify(user));
       } else {
         setCurrentUser(null);
+        setLoading(false);
         sessionStorage.removeItem("user");
       }
     });

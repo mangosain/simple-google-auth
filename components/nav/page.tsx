@@ -5,13 +5,13 @@ import { auth, googleProvider } from "@/firebase.config";
 import { signInWithPopup } from "firebase/auth";
 
 const Nav = () => {
-  const { currentUser, setCurrentUser } = useAuth();
+  const authValue = useAuth();
 
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      setCurrentUser(user);
+      authValue?.setCurrentUser(user);
     } catch (error) {
       alert("Error during Google login\n" + error);
     }
@@ -20,7 +20,7 @@ const Nav = () => {
   const handleLogOut = async () => {
     try {
       await auth.signOut();
-      setCurrentUser(null);
+      authValue?.setCurrentUser(null);
     } catch (error) {
       alert("Error during log out\n" + error);
     }
@@ -62,13 +62,15 @@ const Nav = () => {
                 </svg>
               </label>
             </li>
-            <li>
-              {currentUser ? (
-                <a onClick={handleLogOut}>Log Out</a>
-              ) : (
-                <a onClick={handleGoogleLogin}>Log In</a>
-              )}
-            </li>
+            {!authValue?.loading && (
+              <li>
+                {authValue?.currentUser ? (
+                  <a onClick={handleLogOut}>Log Out</a>
+                ) : (
+                  <a onClick={handleGoogleLogin}>Login</a>
+                )}
+              </li>
+            )}
           </ul>
         </div>
       </div>
